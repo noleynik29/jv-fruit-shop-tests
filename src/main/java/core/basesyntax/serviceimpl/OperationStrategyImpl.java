@@ -4,6 +4,7 @@ import core.basesyntax.common.FruitTransaction;
 import core.basesyntax.service.OperationStrategy;
 import core.basesyntax.strategy.OperationHandler;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class OperationStrategyImpl implements OperationStrategy {
@@ -17,7 +18,7 @@ public class OperationStrategyImpl implements OperationStrategy {
         if (operationHandlerMap.isEmpty()) {
             throw new RuntimeException("Operation handler map must contain at least one handler");
         }
-        this.operationHandlerMap = Collections.unmodifiableMap(operationHandlerMap);
+        this.operationHandlerMap = Collections.unmodifiableMap(new HashMap<>(operationHandlerMap));
     }
 
     @Override
@@ -25,13 +26,11 @@ public class OperationStrategyImpl implements OperationStrategy {
         if (operation == null) {
             throw new RuntimeException("Operation must not be null");
         }
-
         OperationHandler handler = operationHandlerMap.get(operation);
         if (handler == null) {
             throw new RuntimeException("No handler found for operation '" + operation
                     + "'. Supported operations: " + operationHandlerMap.keySet());
         }
-
         return handler;
     }
 }
