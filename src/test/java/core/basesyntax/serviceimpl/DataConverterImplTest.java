@@ -25,7 +25,7 @@ class DataConverterImplTest {
 
     @Test
     void convertReport_validReport_ok() {
-        List<String> REPORT = List.of(TITLE, "b,banana,20,", "b,apple,100",
+        List<String> report = List.of(TITLE, "b,banana,20,", "b,apple,100",
                 "s,banana,100", "p,banana,13", "r,apple,10",
                 "p,apple,20", "p,banana,5", "s,banana,50");
         List<FruitTransaction> expected = List.of(
@@ -38,7 +38,7 @@ class DataConverterImplTest {
                 new FruitTransaction(FruitTransaction.Operation.PURCHASE, BANANA, 5),
                 new FruitTransaction(FruitTransaction.Operation.SUPPLY, BANANA, 50));
 
-        List<FruitTransaction> actual = dataConverterService.convertToTransaction(REPORT);
+        List<FruitTransaction> actual = dataConverterService.convertToTransaction(report);
 
         assertIterableEquals(expected, actual);
     }
