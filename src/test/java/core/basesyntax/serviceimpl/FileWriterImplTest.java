@@ -16,7 +16,7 @@ class FileWriterImplTest {
     private static final String APPLE_WITH_QUANTITY = "apple,20";
     private static final String BANANA_WITH_QUANTITY = "banana,50";
     private static final String NO_VALID_PATH = "/src/resource/img/report.csv";
-    private static final String FINAL_REPORT = "src/main/resources/report.csv";
+    private static final String FINAL_REPORT = "src/test/resources/report.csv";
     private static FileWriter fileWriter;
 
     @BeforeEach

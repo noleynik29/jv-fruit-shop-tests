@@ -1,5 +1,6 @@
 package core.basesyntax.serviceimpl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +16,6 @@ class DataConverterImplTest {
     private static final String APPLE = "apple";
     private static final String BANANA = "banana";
     private static final String TITLE = "type,fruit,quantity";
-    private static final List<String> REPORT = List.of(TITLE, "b,banana,20,", "b,apple,100",
-            "s,banana,100", "p,banana,13", "r,apple,10",
-            "p,apple,20", "p,banana,5", "s,banana,50");
     private static DataConverterImpl dataConverterService;
 
     @BeforeAll
@@ -28,6 +25,9 @@ class DataConverterImplTest {
 
     @Test
     void convertReport_validReport_ok() {
+        List<String> REPORT = List.of(TITLE, "b,banana,20,", "b,apple,100",
+                "s,banana,100", "p,banana,13", "r,apple,10",
+                "p,apple,20", "p,banana,5", "s,banana,50");
         List<FruitTransaction> expected = List.of(
                 new FruitTransaction(FruitTransaction.Operation.BALANCE, BANANA, 20),
                 new FruitTransaction(FruitTransaction.Operation.BALANCE, APPLE, 100),
@@ -70,7 +70,7 @@ class DataConverterImplTest {
 
         List<FruitTransaction> actualTransactions
                 = dataConverterService.convertToTransaction(validList);
-        Assertions.assertEquals(expectedTransactions, actualTransactions);
+        assertEquals(expectedTransactions, actualTransactions);
     }
 
     @Test

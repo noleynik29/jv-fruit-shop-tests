@@ -1,17 +1,17 @@
 package core.basesyntax.serviceimpl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class FileReaderImplTest {
-    public static final String EXISTING_REPORT = "src/main/resources/data.csv";
-    public static final String EMPTY_REPORT = "src/main/resources/emptyFile.csv";
-    public static final String NON_EXISTING_FILE = "src/main/resources/nonExistingFile.csv";
+    public static final String EXISTING_REPORT = "src/test/resources/data.csv";
+    public static final String EMPTY_REPORT = "src/test/resources/emptyFile.csv";
+    public static final String NON_EXISTING_FILE = "src/test/resources/nonExistingFile.csv";
     private static FileReaderImpl fileReader;
     private static List<String> report;
 
@@ -26,7 +26,7 @@ class FileReaderImplTest {
     @Test
     void read_existingReport_ok() {
         List<String> containText = fileReader.read(EXISTING_REPORT);
-        Assertions.assertEquals(report, containText);
+        assertEquals(report, containText);
     }
 
     @Test
@@ -39,6 +39,6 @@ class FileReaderImplTest {
     void read_emptyFile_ok() {
         List<String> expected = Collections.emptyList();
         List<String> actual = fileReader.read(EMPTY_REPORT);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }
