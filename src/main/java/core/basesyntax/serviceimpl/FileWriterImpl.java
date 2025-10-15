@@ -9,7 +9,7 @@ import java.nio.file.Path;
 public class FileWriterImpl implements FileWriter {
     @Override
     public void write(String data, String fileName) {
-        if (fileName == null || fileName.trim().isEmpty()) {
+        if (fileName == null || fileName.isEmpty()) {
             throw new RuntimeException("File path must be provided and cannot be empty");
         }
         if (data == null) {

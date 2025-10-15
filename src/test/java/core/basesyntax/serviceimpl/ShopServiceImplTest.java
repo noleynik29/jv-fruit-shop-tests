@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 class ShopServiceImplTest {
     private ShopServiceImpl shopService;
-    private Map<String, Integer> fruits;
     private OperationStrategy operationStrategy;
 
     @BeforeEach
@@ -34,7 +33,6 @@ class ShopServiceImplTest {
                 FruitTransaction.Operation.SUPPLY, new SupplyOperation());
         operationStrategy = new OperationStrategyImpl(operationHandlers);
         shopService = new ShopServiceImpl(operationStrategy);
-        fruits = Storage.getFruits();
     }
 
     @Test
@@ -89,12 +87,12 @@ class ShopServiceImplTest {
         );
 
         shopService.process(transactions);
-        assertEquals(50, fruits.get("apple"));
+        assertEquals(50, Storage.getFruits().get("apple"));
     }
 
     @Test
     void process_emptyList_ok() {
         shopService.process(Collections.emptyList());
-        assertTrue(fruits.isEmpty());
+        assertEquals(0, Storage.getFruits().size());
     }
 }

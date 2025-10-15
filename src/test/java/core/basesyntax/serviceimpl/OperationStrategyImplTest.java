@@ -1,15 +1,12 @@
 package core.basesyntax.serviceimpl;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import core.basesyntax.common.FruitTransaction;
 import core.basesyntax.strategy.OperationHandler;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class OperationStrategyImplTest {
 
@@ -57,27 +54,34 @@ class OperationStrategyImplTest {
     void getHandler_knownOperations_ok() {
         Map<FruitTransaction.Operation, OperationHandler> map = new HashMap<>();
         for (FruitTransaction.Operation op : FruitTransaction.Operation.values()) {
-            map.put(op, simpleHandler);
+            map.put(op, t -> {});
         }
         OperationStrategyImpl strategy = new OperationStrategyImpl(map);
 
         for (FruitTransaction.Operation op : FruitTransaction.Operation.values()) {
-            OperationHandler handler = assertDoesNotThrow(() -> strategy.getOperationHandler(op));
-            assertNotNull(handler);
+            OperationHandler handler = strategy.getOperationHandler(op);
+
+            assertNotNull(handler, "Handler must not be null for operation: " + op);
+            assertEquals(map.get(op), handler, "Handler should match the one in the map for: " + op);
         }
     }
 
+
     @Test
     void externalMapModification_doesNotAffectStrategy() {
-        Map<FruitTransaction.Operation, OperationHandler> map = new HashMap<>();
-        map.put(FruitTransaction.Operation.BALANCE, simpleHandler);
-        OperationStrategyImpl strategy = new OperationStrategyImpl(map);
-        map.put(FruitTransaction.Operation.SUPPLY, simpleHandler);
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> strategy.getOperationHandler(FruitTransaction.Operation.SUPPLY));
-        assertTrue(ex.getMessage().contains("Supported operations"));
-        OperationHandler handler = assertDoesNotThrow(() ->
-                strategy.getOperationHandler(FruitTransaction.Operation.BALANCE));
-        assertNotNull(handler);
+        Map<FruitTransaction.Operation, OperationHandler> originalMap = new HashMap<>();
+        originalMap.put(FruitTransaction.Operation.BALANCE, t -> {});
+
+        OperationStrategyImpl strategy = new OperationStrategyImpl(originalMap);
+        originalMap.put(FruitTransaction.Operation.SUPPLY, t -> {});
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                        strategy.getOperationHandler(FruitTransaction.Operation.SUPPLY),
+                "Strategy must not be affected by external map modifications");
+        assertTrue(exception.getMessage().contains("Supported operations"));
+
+        OperationHandler existingHandler = strategy.getOperationHandler(FruitTransaction.Operation.BALANCE);
+        assertNotNull(existingHandler, "Existing handler must still be available");
+        assertEquals(originalMap.get(FruitTransaction.Operation.BALANCE), existingHandler);
     }
+
 }
