@@ -13,6 +13,7 @@ public class FileReaderImpl implements FileReader {
     public List<String> read(String filePath) {
         try {
             return Files.lines(Path.of(filePath))
+                    .map(String::strip)
                     .collect(toList());
         } catch (IOException e) {
             throw new RuntimeException("Failed to read file: " + filePath, e);
