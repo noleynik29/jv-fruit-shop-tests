@@ -1,12 +1,15 @@
 package core.basesyntax.serviceimpl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import core.basesyntax.common.FruitTransaction;
 import core.basesyntax.strategy.OperationHandler;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class OperationStrategyImplTest {
 
@@ -62,10 +65,10 @@ class OperationStrategyImplTest {
             OperationHandler handler = strategy.getOperationHandler(op);
 
             assertNotNull(handler, "Handler must not be null for operation: " + op);
-            assertEquals(map.get(op), handler, "Handler should match the one in the map for: " + op);
+            assertEquals(map.get(op), handler, "Handler should match the one in the map for: "
+                    + op);
         }
     }
-
 
     @Test
     void externalMapModification_doesNotAffectStrategy() {
@@ -79,7 +82,8 @@ class OperationStrategyImplTest {
                 "Strategy must not be affected by external map modifications");
         assertTrue(exception.getMessage().contains("Supported operations"));
 
-        OperationHandler existingHandler = strategy.getOperationHandler(FruitTransaction.Operation.BALANCE);
+        OperationHandler existingHandler = strategy.getOperationHandler(
+                FruitTransaction.Operation.BALANCE);
         assertNotNull(existingHandler, "Existing handler must still be available");
         assertEquals(originalMap.get(FruitTransaction.Operation.BALANCE), existingHandler);
     }
